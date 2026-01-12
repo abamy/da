@@ -1,25 +1,15 @@
-/* eslint-disable import/no-cycle */
-import { NX_ORIGIN } from './scripts.js';
-
-let expMod;
-const DA_EXP = '/public/plugins/exp/exp.js';
-
-async function toggleExp() {
-  const exists = document.querySelector('#aem-sidekick-exp');
-
-  // If it doesn't exist, let module side effects run
-  if (!exists) {
-    expMod = await import(`${NX_ORIGIN}${DA_EXP}`);
-    return;
-  }
-
-  // Else, cache the module here and toggle it.
-  if (!expMod) expMod = await import(`${NX_ORIGIN}${DA_EXP}`);
-  expMod.default();
+async function loadLivePreview(origin, loadPage) {
+  const mod = await import(`${origin}/scripts/dapreview.js`);
+  mod.default(loadPage);
 }
 
-(async function sidekick() {
-  const sk = document.querySelector('aem-sidekick');
-  if (!sk) return;
-  sk.addEventListener('custom:experimentation', toggleExp);
-}());
+export default function daPreview(loadPage) {
+  const { search } = window.location;
+  const ref = new URLSearchParams(search).get('dapreview');
+  if (!ref) return;
+  let origin;
+  if (ref === 'on') origin = 'https://da.live';
+  if (ref === 'local') origin = 'http://localhost:3000';
+  if (!origin) origin = `https://${ref}--da-live--adobe.aem.live`;
+  loadLivePreview(origin, loadPage);
+}
