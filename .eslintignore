@@ -1,1 +1,7 @@
 helix-importer-ui
+plugins/experimentation/tests/
+plugins/experimentation/playwright.config.js
+deps/
+blocks/advanced-tabs/
+scripts/utils/
+tools/scheduler/

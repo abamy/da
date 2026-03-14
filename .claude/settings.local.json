@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git remote add upstream https://github.com/aemsites/da-block-collection.git)"
+      "Bash(git remote add upstream https://github.com/aemsites/da-block-collection.git)",
+      "Bash(gh run list --limit 5)",
+      "Bash(gh run view 22962710094 --log-failed)",
+      "Bash(npm ci)",
+      "Bash(npm run lint)",
+      "Bash(xxd /Users/bamy/Workspace/franklin/da/tools/quick-edit/quick-edit.js)"
     ]
   }
 }
