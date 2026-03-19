@@ -233,6 +233,36 @@
           }
         },
         {
+          "title": "Form",
+          "id": "form",
+          "model": "form",
+          "plugins": {
+            "da": {
+              "name": "form",
+              "rows": 2,
+              "columns": 1,
+              "fields": [
+                {
+                  "name": "formUrl",
+                  "selector": "div:nth-child(1)>div>p>a[href]"
+                },
+                {
+                  "name": "formUrlText",
+                  "selector": "div:nth-child(1)>div>p>a"
+                },
+                {
+                  "name": "submitUrl",
+                  "selector": "div:nth-child(2)>div>p>a[href]"
+                },
+                {
+                  "name": "submitUrlText",
+                  "selector": "div:nth-child(2)>div>p>a"
+                }
+              ]
+            }
+          }
+        },
+        {
           "title": "Fragment",
           "id": "fragment",
           "model": "fragment",

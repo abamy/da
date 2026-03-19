@@ -169,6 +169,37 @@
     ]
   },
   {
+    "id": "form",
+    "fields": [
+      {
+        "component": "text",
+        "name": "formUrl",
+        "label": "Form Definition URL",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "formUrlText",
+        "label": "Form URL Text",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "submitUrl",
+        "label": "Submit URL",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "submitUrlText",
+        "label": "Submit URL Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
     "id": "fragment",
     "fields": [
       {
