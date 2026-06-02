@@ -6,11 +6,8 @@
     {
       "id": "quick-edit",
       "title": "Quick Edit",
-      "event": "quick-edit",
-      "environments": [
-        "preview",
-        "dev"
-      ]
+      "environments": ["dev", "preview"],
+      "event": "quick-edit"
     }
   ]
 }

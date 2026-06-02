@@ -182,6 +182,27 @@ async function loadLazy(doc) {
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   loadFonts();
+
+  const loadQuickEdit = async (...args) => {
+      // eslint-disable-next-line import/no-cycle
+      const { default: initQuickEdit } = await import('../tools/quick-edit/quick-edit.js');
+      initQuickEdit(...args);
+    };
+
+    const addSidekickListeners = (sk) => {
+      sk.addEventListener('custom:quick-edit', loadQuickEdit);
+    };
+
+    const sk = document.querySelector('aem-sidekick');
+    if (sk) {
+      addSidekickListeners(sk);
+    } else {
+      // wait for sidekick to be loaded
+      document.addEventListener('sidekick-ready', () => {
+      // sidekick now loaded
+        addSidekickListeners(document.querySelector('aem-sidekick'));
+      }, { once: true });
+    }
 }
 
 /**
@@ -204,7 +225,36 @@ async function loadSidekick() {
   });
 }
 
+async function loadTarget() {
+  // Check for target metadata flag
+  const targetMeta = getMetadata('target');
+  if (targetMeta) {
+    // Overwrite target domains to be same origin
+    window.targetGlobalSettings = {
+      serverDomain: hostnames[0],
+      secureOnly: true,
+      overrideMboxEdgeServer: false,
+    };
+
+    // Import the local copy of at.js
+    await import('../deps/at/at.js');
+
+    // Request all the relevant offers for the page
+    const offers = await window.adobe.target.getOffers({
+      request: { execute: { pageLoad: {} } },
+    });
+
+    // Loop through them and inject if they exist
+    offers?.execute?.pageLoad?.options?.forEach((opt) => {
+      const { cssSelector, content } = opt.content[0];
+      const el = document.querySelector(cssSelector);
+      if (el) el.outerHTML = content;
+    });
+  }
+}
+
 export async function loadPage() {
+  await loadTarget();
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();
@@ -230,3 +280,9 @@ loadPage();
   // eslint-disable-next-line import/no-unresolved
   if (exp) import('https://da.live/nx/public/plugins/exp/exp.js');
 }());
+
+(() => {
+  const hasQE = new URL(window.location.href).searchParams.has('quick-edit');
+  // eslint-disable-next-line import/no-cycle
+  if (hasQE) import('../tools/quick-edit/quick-edit.js').then((mod) => mod.default());
+})();
