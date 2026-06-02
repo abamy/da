@@ -1,4 +1,6 @@
-export default async function fetchTarget({ url, env, savedSearch, originalRequest }) {
+export default async function fetchTarget({
+  url, env, savedSearch, originalRequest,
+}) {
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',

@@ -184,25 +184,25 @@ async function loadLazy(doc) {
   loadFonts();
 
   const loadQuickEdit = async (...args) => {
-      // eslint-disable-next-line import/no-cycle
-      const { default: initQuickEdit } = await import('../tools/quick-edit/quick-edit.js');
-      initQuickEdit(...args);
-    };
+    // eslint-disable-next-line import/no-cycle
+    const { default: initQuickEdit } = await import('../tools/quick-edit/quick-edit.js');
+    initQuickEdit(...args);
+  };
 
-    const addSidekickListeners = (sk) => {
-      sk.addEventListener('custom:quick-edit', loadQuickEdit);
-    };
+  const addSidekickListeners = (sk) => {
+    sk.addEventListener('custom:quick-edit', loadQuickEdit);
+  };
 
-    const sk = document.querySelector('aem-sidekick');
-    if (sk) {
-      addSidekickListeners(sk);
-    } else {
-      // wait for sidekick to be loaded
-      document.addEventListener('sidekick-ready', () => {
+  const sk = document.querySelector('aem-sidekick');
+  if (sk) {
+    addSidekickListeners(sk);
+  } else {
+    // wait for sidekick to be loaded
+    document.addEventListener('sidekick-ready', () => {
       // sidekick now loaded
-        addSidekickListeners(document.querySelector('aem-sidekick'));
-      }, { once: true });
-    }
+      addSidekickListeners(document.querySelector('aem-sidekick'));
+    }, { once: true });
+  }
 }
 
 /**
@@ -230,6 +230,7 @@ async function loadTarget() {
   const targetMeta = getMetadata('target');
   if (targetMeta) {
     // Overwrite target domains to be same origin
+    const hostnames = [window.location.hostname];
     window.targetGlobalSettings = {
       serverDomain: hostnames[0],
       secureOnly: true,
@@ -237,6 +238,7 @@ async function loadTarget() {
     };
 
     // Import the local copy of at.js
+    // eslint-disable-next-line import/no-unresolved
     await import('../deps/at/at.js');
 
     // Request all the relevant offers for the page
